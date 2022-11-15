@@ -5,7 +5,8 @@ const UserModel = require('../models/user')
 // create a new exercise for a user
 exports.createExercise = async (req, res) => {
     try {
-        const _id = req.body[":_id"];
+        // const _id = req.body[":_id"];
+        const _id = req.params._id;
         const foundUser = await UserModel.findOne({
             "_id": _id
         })

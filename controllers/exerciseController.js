@@ -16,7 +16,7 @@ exports.createExercise = async (req, res) => {
             "userId": _id,
             "description": description,
             "duration": duration,
-            "date": date || new Date().toDateString()
+            "date": date ? new Date(date).toDateString() : new Date().toDateString()
         }
         const created = await ExerciseModel.create(newExercise);
         const exercise = {

@@ -42,8 +42,11 @@ exports.getExercises = async (req, res) => {
         const _id = req.params._id;
 
         const limit = Number(req.query.limit) || 0;
-        const from = req.query.from || new Date(0);
-        const to = req.query.to || new Date(Date.now())
+        // const from = req.query.from || new Date(0);
+        // const to = req.query.to || new Date(Date.now())
+
+        const from = req.query.from ? new Date(req.query.from) : new Date(0);
+        const to = req.query.to ? new Date(req.query.to) : new Date(Date.now());
 
         const foundUser = await UserModel.findOne({
             "_id": _id
@@ -55,7 +58,6 @@ exports.getExercises = async (req, res) => {
             "userId": _id,
             "date": { $gte: from, $lte: to }
         }).limit(limit);
-        
         const count = exercises.length;
         const exercisesList = exercises.map(exercise => {
             return {

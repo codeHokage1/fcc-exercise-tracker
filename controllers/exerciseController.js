@@ -14,17 +14,17 @@ exports.createExercise = async (req, res) => {
         const { description, duration, date } = req.body;
         const newExercise = {
             "userId": _id,
-            "description": description,
+            "date": date ? new Date(date).toDateString() : new Date().toDateString(),
             "duration": duration,
-            "date": date ? new Date(date).toDateString() : new Date().toDateString()
+            "description": description,            
         }
         const created = await ExerciseModel.create(newExercise);
         const exercise = {
-            "_id": _id,
             "username": username,
             "description": created.description,
             "duration": created.duration,
-            "date": created.date
+            "date": created.date,         
+            "_id": _id,
         }
         res.status(201).json(exercise);
     } catch (error) {
@@ -56,9 +56,9 @@ exports.getExercises = async (req, res) => {
             }
         })
         return res.json({
-            "_id": _id,
             "username": username,
             "count": count,
+            "_id": _id,
             "log": exercisesList
         })
     } catch (error) {

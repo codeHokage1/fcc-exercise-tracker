@@ -40,14 +40,22 @@ exports.createExercise = async (req, res) => {
 exports.getExercises = async (req, res) => {
     try {
         const _id = req.params._id;
+
+        const limit = Number(req.query.limit) || 0;
+        const from = req.query.from || new Date(0);
+        const to = req.query.to || new Date(Date.now())
+
         const foundUser = await UserModel.findOne({
             "_id": _id
         })
+
         if (!foundUser) return res.status(404).json({ "message": `User with id ${_id} not found` })
         const { username } = foundUser;
         const exercises = await ExerciseModel.find({
-            "userId": _id
-        })
+            "userId": _id,
+            "date": { $gte: from, $lte: to }
+        }).limit(limit);
+        
         const count = exercises.length;
         const exercisesList = exercises.map(exercise => {
             return {
